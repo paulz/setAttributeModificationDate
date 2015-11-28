@@ -1,5 +1,10 @@
 //: ## Demonstrate setResourceValue with NSURLAttributeModificationDateKey fails
 //:
+//: According to the [NSURL documentation](https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURL_Class/#//apple_ref/doc/constant_group/Common_File_System_Resource_Keys) NSURLAttributeModificationDateKey is a read-write
+//:
+//: `NSURLAttributeModificationDateKey`
+//:
+//: The time at which the resource’s attributes were most recently modified, returned as an NSDate object if the volume supports attribute modification dates, or nil if attribute modification dates are unsupported **(read-write)**.
 
 
 import Foundation
