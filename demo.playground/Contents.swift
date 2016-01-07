@@ -13,14 +13,23 @@ import Foundation
 let fileUrl = NSURL.fileURLWithPath(NSTemporaryDirectory() + "a file")
 try "text".writeToURL(fileUrl, atomically: true, encoding: NSASCIIStringEncoding)
 
-//: set attribute modification date
-let referenceDate = NSDate(timeIntervalSinceReferenceDate: 0)
-try fileUrl.setResourceValue(referenceDate, forKey: NSURLAttributeModificationDateKey)
+//: get created date
+var createdDateValue: AnyObject?
+try fileUrl.getResourceValue(&createdDateValue, forKey: NSURLCreationDateKey)
+let createdDate = createdDateValue as! NSDate
+
+//: wait 10 seconds to have a later date
+let laterDate = NSDate(timeIntervalSinceNow: 10)
+NSRunLoop.currentRunLoop().runUntilDate(laterDate)
+
+//: set attribute modification date to the later date
+try fileUrl.setResourceValue(laterDate, forKey: NSURLAttributeModificationDateKey)
 
 //: get attribute modification date
 var resourceValue: AnyObject?
 try fileUrl.getResourceValue(&resourceValue, forKey: NSURLAttributeModificationDateKey)
 
-//: surprisingly the date we get back is not the one we set, but the current date
+//: surprisingly the date we get back is not the one we set, but the created date
 var attributeModificationDate  = resourceValue as! NSDate
-assert(attributeModificationDate.isEqualToDate(referenceDate), "should equal to reference date")
+assert(attributeModificationDate.isEqualToDate(createdDate), "is equal to created date")
+assert(attributeModificationDate.isEqualToDate(laterDate), "should equal to later date")
